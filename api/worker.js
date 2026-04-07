@@ -38,25 +38,24 @@ For each major claim or finding in your response, append an end-note number in b
 Number each distinct claim that requires evidence. Use the same number if referring to the same claim multiple times.
 
 ### 2. Confidence Levels Section (Required at End)
-At the end of your response, include a "**Confidence Levels**" section that lists each end-note with:
-- The end-note number
-- Confidence percentage (e.g., 90%, 75%, 55%)
-- THREE full APA-format citations for the sources that support that specific claim
+At the end of your response, include a "Confidence Levels" section (formatted as ## heading) that lists each end-note with:
+- The end-note number in bold brackets: **[1]**, **[2]**, etc.
+- Confidence percentage on the same line: **[1] 90%**
+- THREE full APA-format citations as a bulleted list below each number
 
-Format example:
-```
+Example format:
+
 ## Confidence Levels
 
 **[1] 90%**
 - Russell, D. R. (2002). Writing in the academic disciplines: A curricular history. Southern Illinois University Press.
-- Bazerman, C. (2016). What do sociocultural studies of writing tell us about learning to write? In C. A. MacArthur et al. (Eds.), *Handbook of writing research* (2nd ed., pp. 11-23). Guilford.
-- Thaiss, C., & Porter, T. (2010). The state of WAC/WID in 2010. *College Composition and Communication*, 61(3), 534-570.
+- Bazerman, C. (2016). What do sociocultural studies of writing tell us about learning to write? In C. A. MacArthur et al. (Eds.), Handbook of writing research (2nd ed., pp. 11-23). Guilford.
+- Thaiss, C., & Porter, T. (2010). The state of WAC/WID in 2010. College Composition and Communication, 61(3), 534-570.
 
 **[2] 75%**
-- [Three more APA citations...]
-```
+- [Three more complete APA citations for the claim marked [2]]
 
-Each citation must be complete with authors, year, title, journal/book details, and pages when available.
+Each citation must be complete with authors, year, title, journal/book details, and page numbers when available.
 
 ### 3. Follow-up Prompt
 End with a brief invitation to explore further:
