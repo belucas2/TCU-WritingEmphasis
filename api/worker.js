@@ -36,11 +36,11 @@ Example:
 - "Writing to learn activities deepen content understanding [3]."
 
 **Confidence Levels Section (Required at End):**
-After your response, include a "Confidence Levels" section (formatted as ## heading) with EXACTLY 3 entries — one for each of [1], [2], [3].
+After your response, include a "Confidence Levels & References" section (formatted as ## heading) with EXACTLY 3 entries — one for each of [1], [2], [3].
 
 Format:
 
-## Confidence Levels
+## Confidence Levels & References
 
 **[1] 90%**
 - Russell, D. R. (2002). Writing in the academic disciplines: A curricular history. Southern Illinois University Press.

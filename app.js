@@ -342,7 +342,7 @@
     let confidenceLevelsH2 = null;
     
     h2Elements.forEach(h2 => {
-      if (h2.textContent.toLowerCase().includes('confidence level')) {
+      if (h2.textContent.toLowerCase().includes('confidence levels')) {
         confidenceLevelsH2 = h2;
       }
     });
