@@ -294,21 +294,20 @@
     let inner = '<div class="message-content">' + htmlText;
     
     // Add feedback buttons
-    inner += `
-      <div class="message-feedback">
-        <button class="feedback-btn" data-feedback="positive" data-message-id="${messageId}" title="Helpful response">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-            <path d="M8 2v8m0-8l3 3m-3-3L5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M2 12h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-          </svg>
-        </button>
-        <button class="feedback-btn" data-feedback="negative" data-message-id="${messageId}" title="Needs improvement">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-            <path d="M8 14V6m0 8l3-3m-3 3l-3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M2 4h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-          </svg>
-        </button>
-      </div>`;
+    inner += '<div class="message-feedback">';
+    inner += '<button class="feedback-btn" data-feedback="positive" data-message-id="' + messageId + '" title="Helpful response">';
+    inner += '<svg width="16" height="16" viewBox="0 0 16 16" fill="none">';
+    inner += '<path d="M8 2v8m0-8l3 3m-3-3L5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>';
+    inner += '<path d="M2 12h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>';
+    inner += '</svg>';
+    inner += '</button>';
+    inner += '<button class="feedback-btn" data-feedback="negative" data-message-id="' + messageId + '" title="Needs improvement">';
+    inner += '<svg width="16" height="16" viewBox="0 0 16 16" fill="none">';
+    inner += '<path d="M8 14V6m0 8l3-3m-3 3l-3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>';
+    inner += '<path d="M2 4h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>';
+    inner += '</svg>';
+    inner += '</button>';
+    inner += '</div>';
 
     inner += '</div>';
     div.innerHTML = inner;
