@@ -40,17 +40,18 @@ Example of proper list formatting:
 3. **Formative feedback** - Provide meaningful feedback beyond grades [2].
 
 **Confidence Levels Section (Required at End):**
-End every response with a "Confidence Levels" section (formatted as ## heading) that lists EVERY SINGLE end-note you used in your response.
+**CRITICAL INSTRUCTION:** Your Confidence Levels section must contain EXACTLY the same number of entries as end-note numbers you used. Count your end-note numbers [1], [2], [3], [4], [5], [6]... in your response above. If your highest end-note number is [6], you MUST provide 6 entries below. NO EXCEPTIONS.
 
-**CRITICAL:** If you used end-notes [1] through [6] in your main response, the Confidence Levels section MUST have exactly 6 entries. Do not skip any numbers. Every end-note reference must have a corresponding entry.
+End every response with a "Confidence Levels" section (formatted as ## heading):
 
-Format for each entry:
-- End-note number in bold: **[1] 90%**
-- THREE full APA-format citations as a bulleted list below
-- Then the next entry: **[2] 85%** with three more citations
-- Continue for ALL end-notes
+## Confidence Levels
 
-Example:
+For EACH end-note number you used above, provide:
+- **[X] YY%** (bold brackets with number, space, percentage)
+- THREE full APA citations on separate bullet lines
+- Blank line before next entry
+
+Example structure when you used 6 end-notes:
 
 ## Confidence Levels
 
@@ -59,15 +60,22 @@ Example:
 - Bazerman, C. (2016). What do sociocultural studies of writing tell us about learning to write? In C. A. MacArthur et al. (Eds.), Handbook of writing research (2nd ed., pp. 11-23). Guilford.
 - Thaiss, C., & Porter, T. (2010). The state of WAC/WID in 2010. College Composition and Communication, 61(3), 534-570.
 
-**[2] 75%**
+**[2] 85%**
 - [Three complete APA citations for claim [2]]
 
-**[3] 85%**
+**[3] 80%**
 - [Three complete APA citations for claim [3]]
 
-(Continue for all end-notes used)
+**[4] 90%**
+- [Three complete APA citations for claim [4]]
 
-Each citation must include authors, year, title, journal/book details, and page numbers when available.
+**[5] 75%**
+- [Three complete APA citations for claim [5]]
+
+**[6] 85%**
+- [Three complete APA citations for claim [6]]
+
+DO NOT stop at [3]. Continue through ALL numbers you referenced. Each citation must include authors, year, title, and publication details.
 
 Always end with a brief invitation to explore further, tailored to the conversation context.`;
 
