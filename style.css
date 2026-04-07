@@ -156,18 +156,17 @@ header {
 .message-content p:last-child { margin-bottom: 0; }
 .message-content ul, .message-content ol { margin: 0.4em 0 0.6em 1.5em; }
 .message-content li { margin-bottom: 0.3em; }
-
-/* Confidence level badges and inline code */
-.message-content code {
-  background: transparent;
-  padding: 0 2px;
-  border-radius: 0;
-  font-size: 0.7em;
-  color: #999;
-  font-weight: 400;
-}
-
 .message-content strong { font-weight: 600; }
+
+.message-content h2 {
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 6px;
+}
 
 .message-content h3 {
   font-size: 1rem;
@@ -175,6 +174,25 @@ header {
   margin-top: 16px;
   margin-bottom: 8px;
   color: var(--tcu-purple);
+}
+
+/* Confidence Levels section - smaller font */
+.message-content h2:has(+ *) + * {
+  font-size: 9pt;
+}
+
+/* All content after Confidence Levels heading */
+.message-content h2 ~ p,
+.message-content h2 ~ ul,
+.message-content h2 ~ ol {
+  font-size: 9pt;
+  color: var(--text-secondary);
+}
+
+.message-content h2 ~ ul li,
+.message-content h2 ~ ol li {
+  font-size: 9pt;
+  margin-bottom: 4px;
 }
 
 /* ── Message Feedback ─────────────────────────────────────── */
