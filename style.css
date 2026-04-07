@@ -174,10 +174,13 @@ header {
 
 /* Confidence level badges - styled as inline code with color */
 .message-content code {
-  background: rgba(77, 25, 121, 0.1);
-  border: 1px solid rgba(77, 25, 121, 0.2);
-  color: var(--tcu-purple);
-  font-weight: 600;
+  background: transparent;
+  border: none;
+  color: #999;
+  font-weight: 400;
+  font-size: 0.5em;
+  vertical-align: baseline;
+  padding: 0 2px;
 }
 
 /* ── Message Feedback ─────────────────────────────────────── */

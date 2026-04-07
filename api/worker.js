@@ -31,13 +31,13 @@ Every response MUST include these three elements:
 
 ### 1. Confidence Levels
 For each major claim or finding in your response, append a confidence badge immediately after the statement using this format:
-- [High: 90%] — Multiple recent sources with consistent findings
-- [Moderate: 75%] — Some sources support this, with minor variations
-- [Low: 55%] — Limited or older sources; conflicting perspectives exist
+- [High confidence: 90%] — Multiple recent sources with consistent findings
+- [Moderate confidence: 75%] — Some sources support this, with minor variations
+- [Low confidence: 55%] — Limited or older sources; conflicting perspectives exist
 
-Use inline code formatting for the badges: \`[High: 88%]\`
+Use inline code formatting for the badges: \`[High confidence: 88%]\`
 
-Example: "WAC programs improve critical thinking skills across disciplines \`[High: 88%]\`."
+Example: "WAC programs improve critical thinking skills across disciplines \`[High confidence: 88%]\`."
 
 ### 2. Key Sources Section
 At the end of your response, include a "**Key Sources**" section with FULL APA-format citations for the three (3) most relevant and recent sources you drew upon. Format each citation meticulously:
