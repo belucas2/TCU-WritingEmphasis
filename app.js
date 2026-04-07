@@ -285,15 +285,13 @@
     const messageId = 'msg-' + Date.now();
     div.id = messageId;
 
-    // Parse text: replace citation markers like 【4:0†source】 with numbered badges
+    // Remove OpenAI citation markers (we're using our own end-note system)
+    text = text.replace(/【[^】]*†[^】]*】/g, '');
+    text = text.replace(/\[[0-9]+:[0-9]+†[^\]]*\]/g, '');
+    
     let htmlText = renderMarkdown(text);
-    htmlText = replaceCitationMarkers(htmlText, citations);
 
     let inner = `<div class="message-content">${htmlText}`;
-
-    if (citations && citations.length > 0) {
-      inner += renderCitations(citations);
-    }
     
     // Add feedback buttons
     inner += `
@@ -368,13 +366,17 @@
     const accordionContent = document.createElement('div');
     accordionContent.className = 'confidence-accordion-content';
 
-    // Move all siblings after h2 into the accordion content
-    let nextSibling = confidenceLevelsH2.nextSibling;
-    while (nextSibling) {
-      const currentNode = nextSibling;
-      nextSibling = nextSibling.nextSibling;
-      accordionContent.appendChild(currentNode);
+    // Collect all elements after h2 until the end or until feedback div
+    let nextElement = confidenceLevelsH2.nextElementSibling;
+    const elementsToMove = [];
+    
+    while (nextElement && !nextElement.classList.contains('message-feedback')) {
+      elementsToMove.push(nextElement);
+      nextElement = nextElement.nextElementSibling;
     }
+    
+    // Move collected elements into accordion
+    elementsToMove.forEach(el => accordionContent.appendChild(el));
 
     // Build the accordion structure
     accordionWrapper.appendChild(accordionHeader);
