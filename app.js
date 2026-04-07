@@ -291,7 +291,7 @@
     
     let htmlText = renderMarkdown(text);
 
-    let inner = `<div class="message-content">${htmlText}`;
+    let inner = '<div class="message-content">' + htmlText;
     
     // Add feedback buttons
     inner += `
