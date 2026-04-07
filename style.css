@@ -176,23 +176,77 @@ header {
   color: var(--tcu-purple);
 }
 
-/* Confidence Levels section - smaller font */
-.message-content h2:has(+ *) + * {
-  font-size: 9pt;
+/* Confidence Levels Accordion */
+.confidence-accordion {
+  margin-top: 20px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--bg-secondary);
 }
 
-/* All content after Confidence Levels heading */
-.message-content h2 ~ p,
-.message-content h2 ~ ul,
-.message-content h2 ~ ol {
+.confidence-accordion-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  cursor: pointer;
+  user-select: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text);
+  background: var(--bg-secondary);
+  transition: background 0.15s;
+}
+
+.confidence-accordion-header:hover {
+  background: var(--tcu-purple-bg);
+}
+
+.confidence-accordion-arrow {
+  font-size: 0.7rem;
+  transition: transform 0.2s;
+  color: var(--text-secondary);
+}
+
+.confidence-accordion.open .confidence-accordion-arrow {
+  transform: rotate(90deg);
+}
+
+.confidence-accordion-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+  padding: 0 16px;
+}
+
+.confidence-accordion.open .confidence-accordion-content {
+  max-height: 2000px;
+  padding: 12px 16px 16px;
+  transition: max-height 0.4s ease-in;
+}
+
+/* Style content inside accordion */
+.confidence-accordion-content p,
+.confidence-accordion-content ul,
+.confidence-accordion-content ol {
   font-size: 9pt;
   color: var(--text-secondary);
 }
 
-.message-content h2 ~ ul li,
-.message-content h2 ~ ol li {
+.confidence-accordion-content ul li,
+.confidence-accordion-content ol li {
   font-size: 9pt;
   margin-bottom: 4px;
+}
+
+.confidence-accordion-content strong {
+  color: var(--text);
+}
+
+.confidence-accordion-content ul {
+  margin-top: 4px;
+  margin-bottom: 12px;
 }
 
 /* ── Message Feedback ─────────────────────────────────────── */

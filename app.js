@@ -324,6 +324,9 @@
       });
     }
     
+    // Wrap Confidence Levels section in accordion
+    wrapConfidenceLevelsInAccordion(div);
+    
     // Wire up feedback buttons
     div.querySelectorAll('.feedback-btn').forEach(btn => {
       btn.addEventListener('click', () => handleFeedback(btn));
@@ -331,6 +334,59 @@
 
     messagesEl.appendChild(div);
     scrollToBottom();
+  }
+
+  function wrapConfidenceLevelsInAccordion(messageDiv) {
+    const messageContent = messageDiv.querySelector('.message-content');
+    if (!messageContent) return;
+
+    // Find the h2 element that contains "Confidence Levels"
+    const h2Elements = messageContent.querySelectorAll('h2');
+    let confidenceLevelsH2 = null;
+    
+    h2Elements.forEach(h2 => {
+      if (h2.textContent.toLowerCase().includes('confidence level')) {
+        confidenceLevelsH2 = h2;
+      }
+    });
+
+    if (!confidenceLevelsH2) return;
+
+    // Create accordion wrapper
+    const accordionWrapper = document.createElement('div');
+    accordionWrapper.className = 'confidence-accordion';
+
+    // Create accordion header (clickable)
+    const accordionHeader = document.createElement('div');
+    accordionHeader.className = 'confidence-accordion-header';
+    accordionHeader.innerHTML = `
+      <span class="confidence-accordion-arrow">▶</span>
+      <span>${confidenceLevelsH2.textContent}</span>
+    `;
+
+    // Create accordion content container
+    const accordionContent = document.createElement('div');
+    accordionContent.className = 'confidence-accordion-content';
+
+    // Move all siblings after h2 into the accordion content
+    let nextSibling = confidenceLevelsH2.nextSibling;
+    while (nextSibling) {
+      const currentNode = nextSibling;
+      nextSibling = nextSibling.nextSibling;
+      accordionContent.appendChild(currentNode);
+    }
+
+    // Build the accordion structure
+    accordionWrapper.appendChild(accordionHeader);
+    accordionWrapper.appendChild(accordionContent);
+
+    // Replace the h2 with the accordion
+    confidenceLevelsH2.parentNode.replaceChild(accordionWrapper, confidenceLevelsH2);
+
+    // Add click handler to toggle
+    accordionHeader.addEventListener('click', () => {
+      accordionWrapper.classList.toggle('open');
+    });
   }
 
   function appendError(message) {
