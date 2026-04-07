@@ -366,13 +366,18 @@
     const accordionContent = document.createElement('div');
     accordionContent.className = 'confidence-accordion-content';
 
-    // Collect all elements after h2 until the end or until feedback div
-    let nextElement = confidenceLevelsH2.nextElementSibling;
-    const elementsToMove = [];
+    // Get all child elements of messageContent
+    const allChildren = Array.from(messageContent.children);
+    const h2Index = allChildren.indexOf(confidenceLevelsH2);
     
-    while (nextElement && !nextElement.classList.contains('message-feedback')) {
-      elementsToMove.push(nextElement);
-      nextElement = nextElement.nextElementSibling;
+    // Collect all elements after the h2 (excluding feedback div)
+    const elementsToMove = [];
+    for (let i = h2Index + 1; i < allChildren.length; i++) {
+      const child = allChildren[i];
+      if (child.classList.contains('message-feedback')) {
+        break;
+      }
+      elementsToMove.push(child);
     }
     
     // Move collected elements into accordion
