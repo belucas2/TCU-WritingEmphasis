@@ -50,6 +50,12 @@ header {
   gap: 12px;
 }
 
+.tcu-logo {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+}
+
 .logo h1 {
   font-size: 1.1rem;
   font-weight: 600;
