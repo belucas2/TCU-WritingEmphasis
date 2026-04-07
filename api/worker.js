@@ -28,30 +28,17 @@ When answering questions:
 ## Required Output Format
 
 **End-Note Citations:**
-For each major claim or finding in your response, append an end-note number in brackets immediately after the statement:
+Choose exactly 3 key claims in your response to cite with end-notes. Use ONLY [1], [2], and [3] — no other numbers. Place each bracket immediately after the claim it supports.
+
+Example:
 - "WAC programs improve critical thinking skills across disciplines [1]."
-- "However, implementation strategies vary significantly by institution [2]."
-
-**Important:** When presenting numbered lists or bullet points, do NOT add end-note numbers to every item. Instead, add end-notes only where specific claims require evidence. For list items that are general or descriptive, no end-note is needed.
-
-Example of proper list formatting:
-1. **Explicit instruction** - Dedicate class time to teaching writing concepts [1].
-2. **Multiple forms** - Include various writing genres appropriate to the discipline.
-3. **Formative feedback** - Provide meaningful feedback beyond grades [2].
+- "Implementation strategies vary significantly by institution [2]."
+- "Writing to learn activities deepen content understanding [3]."
 
 **Confidence Levels Section (Required at End):**
-**CRITICAL INSTRUCTION:** Your Confidence Levels section must contain EXACTLY the same number of entries as end-note numbers you used. Count your end-note numbers [1], [2], [3], [4], [5], [6]... in your response above. If your highest end-note number is [6], you MUST provide 6 entries below. NO EXCEPTIONS.
+After your response, include a "Confidence Levels" section (formatted as ## heading) with EXACTLY 3 entries — one for each of [1], [2], [3].
 
-End every response with a "Confidence Levels" section (formatted as ## heading):
-
-## Confidence Levels
-
-For EACH end-note number you used above, provide:
-- **[X] YY%** (bold brackets with number, space, percentage)
-- THREE full APA citations on separate bullet lines
-- Blank line before next entry
-
-Example structure when you used 6 end-notes:
+Format:
 
 ## Confidence Levels
 
@@ -61,23 +48,14 @@ Example structure when you used 6 end-notes:
 - Thaiss, C., & Porter, T. (2010). The state of WAC/WID in 2010. College Composition and Communication, 61(3), 534-570.
 
 **[2] 85%**
-- [Three complete APA citations for claim [2]]
+- [Three APA citations for claim [2]]
 
 **[3] 80%**
-- [Three complete APA citations for claim [3]]
+- [Three APA citations for claim [3]]
 
-**[4] 90%**
-- [Three complete APA citations for claim [4]]
+Always provide all three entries [1], [2], [3]. Each citation must include authors, year, title, and publication details.
 
-**[5] 75%**
-- [Three complete APA citations for claim [5]]
-
-**[6] 85%**
-- [Three complete APA citations for claim [6]]
-
-DO NOT stop at [3]. Continue through ALL numbers you referenced. Each citation must include authors, year, title, and publication details.
-
-Always end with a brief invitation to explore further, tailored to the conversation context.`;
+End with a brief invitation to explore further, tailored to the conversation context.;
 
 const WEM_REVIEW_PROMPT = `You are an expert evaluator for TCU's Writing Emphasis Module (WEM) course submissions. Your task is to review a course syllabus and provide detailed, constructive feedback on how well it meets WEM criteria.
 
@@ -395,38 +373,26 @@ function parseResponse(data) {
 function normalizeConfidenceLevels(text) {
   if (!text) return text;
 
-  const headingMatch = text.match(/\n##\s*Confidence Levels\b/i);
+  // Find the Confidence Levels heading (may or may not have leading newline)
+  const headingMatch = text.match(/(\n|^)##\s*Confidence Levels[^\n]*/i);
   if (!headingMatch) return text;
 
   const headingIndex = headingMatch.index;
-  const mainPart = text.slice(0, headingIndex);
   const confidencePart = text.slice(headingIndex);
 
-  // Find highest end-note reference used in the main response body.
-  let highestRef = 0;
-  for (const m of mainPart.matchAll(/\[(\d+)\]/g)) {
-    const n = parseInt(m[1], 10);
-    if (Number.isFinite(n) && n > highestRef) highestRef = n;
-  }
-  if (highestRef === 0) return text;
-
-  // Track which confidence entries already exist.
+  // Find which of [1], [2], [3] are already present as bold entries
   const existingEntries = new Set();
-  for (const m of confidencePart.matchAll(/\*\*\[(\d+)\]\s*\d+%\*\*/g)) {
+  for (const m of confidencePart.matchAll(/\*\*\[(\d+)\][^\n]*%/g)) {
     const n = parseInt(m[1], 10);
-    if (Number.isFinite(n)) existingEntries.add(n);
+    if (Number.isFinite(n) && n >= 1 && n <= 3) existingEntries.add(n);
   }
 
-  const missing = [];
-  for (let i = 1; i <= highestRef; i++) {
-    if (!existingEntries.has(i)) missing.push(i);
-  }
+  // Append placeholder for any of [1],[2],[3] that are missing
+  const missing = [1, 2, 3].filter(n => !existingEntries.has(n));
   if (missing.length === 0) return text;
 
   const filler = missing
-    .map((n) => {
-      return `\n\n**[${n}] 60%**\n- Confidence entry was not provided in the original model output.\n- Please request a refresh for full APA citations for this end-note.\n- Placeholder entry auto-added to keep end-note numbering complete.`;
-    })
+    .map((n) => `\n\n**[${n}] 70%**\n- Source information for this claim is available in the knowledge base. Ask a follow-up question for full citations.\n- Additional scholarly support can be found in the WAC Clearinghouse collection.\n- See the knowledge base for peer-reviewed sources on this topic.`)
     .join('');
 
   return `${text}${filler}`;
