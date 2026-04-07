@@ -40,9 +40,15 @@ Example of proper list formatting:
 3. **Formative feedback** - Provide meaningful feedback beyond grades [2].
 
 **Confidence Levels Section (Required at End):**
-End every response with a "Confidence Levels" section (formatted as ## heading) that lists each end-note:
+End every response with a "Confidence Levels" section (formatted as ## heading) that lists EVERY SINGLE end-note you used in your response.
+
+**CRITICAL:** If you used end-notes [1] through [6] in your main response, the Confidence Levels section MUST have exactly 6 entries. Do not skip any numbers. Every end-note reference must have a corresponding entry.
+
+Format for each entry:
 - End-note number in bold: **[1] 90%**
-- THREE full APA-format citations as a bulleted list below each number
+- THREE full APA-format citations as a bulleted list below
+- Then the next entry: **[2] 85%** with three more citations
+- Continue for ALL end-notes
 
 Example:
 
@@ -54,7 +60,12 @@ Example:
 - Thaiss, C., & Porter, T. (2010). The state of WAC/WID in 2010. College Composition and Communication, 61(3), 534-570.
 
 **[2] 75%**
-- [Three complete APA citations for the claim marked [2]]
+- [Three complete APA citations for claim [2]]
+
+**[3] 85%**
+- [Three complete APA citations for claim [3]]
+
+(Continue for all end-notes used)
 
 Each citation must include authors, year, title, journal/book details, and page numbers when available.
 

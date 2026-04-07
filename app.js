@@ -385,6 +385,12 @@
     console.log('Elements to move:', elementsToMove.length);
     console.log('Element types:', elementsToMove.map(el => el.tagName + (el.textContent ? ' - ' + el.textContent.substring(0, 50) : '')));
     
+    // Temporary visible debug
+    const debugInfo = document.createElement('div');
+    debugInfo.style.cssText = 'background: yellow; padding: 10px; margin: 10px 0; border: 2px solid red;';
+    debugInfo.textContent = 'DEBUG: Found ' + elementsToMove.length + ' elements to move into accordion';
+    accordionContent.appendChild(debugInfo);
+    
     // Now move all collected elements into accordion
     elementsToMove.forEach(el => {
       accordionContent.appendChild(el);
