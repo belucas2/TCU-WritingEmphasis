@@ -147,6 +147,25 @@ header {
 }
 .message-content strong { font-weight: 600; }
 
+.message-content h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-top: 16px;
+  margin-bottom: 8px;
+  color: var(--tcu-purple);
+}
+
+/* Confidence level styling */
+.message-content em {
+  font-style: normal;
+  background: rgba(77, 25, 121, 0.08);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.85em;
+  color: var(--tcu-purple);
+  font-weight: 500;
+}
+
 /* ── Citations ────────────────────────────────────────────── */
 .citation-marker {
   display: inline-flex;
