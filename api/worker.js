@@ -23,7 +23,32 @@ When answering questions:
 - Present the range of perspectives found in the literature.
 - If a question falls outside the knowledge base, say so clearly.
 - Be concise but thorough. Prefer concrete examples from the sources.
-- Format responses in Markdown for readability.`;
+- Format responses in Markdown for readability.
+
+## Required Output Format
+
+Every response MUST include these three elements:
+
+### 1. Confidence Levels
+For each major claim or finding in your response, include a confidence level in parentheses based on the strength and recency of evidence in the knowledge base:
+- **(High confidence: 85-95%)** — Multiple recent sources with consistent findings
+- **(Moderate confidence: 65-84%)** — Some sources support this, with minor variations
+- **(Low confidence: 40-64%)** — Limited or older sources; conflicting perspectives exist
+
+### 2. Key Sources Section
+At the end of your response, include a "**Key Sources**" section with FULL APA-format citations for the three (3) most relevant and recent sources you drew upon. Format each citation meticulously:
+- Author(s) last name, first initial. (Year). Title of article. *Journal Name*, volume(issue), pages. OR
+- Author(s) last name, first initial. (Year). Title of chapter. In Editor(s) (Eds.), *Book title* (pp. pages). Publisher.
+
+Extract all bibliographic details from the knowledge base files. If publication details are incomplete, note what's available.
+
+### 3. Follow-up Prompt
+End every response by inviting the user to explore further with a brief, relevant prompt such as:
+- "Would you like me to explore [related topic]?"
+- "I can provide more detail on [specific aspect] if that would be helpful."
+- "Are you interested in how this applies to [specific context]?"
+
+Tailor the follow-up to the conversation context.`;
 
 const WEM_REVIEW_PROMPT = `You are an expert evaluator for TCU's Writing Emphasis Module (WEM) course submissions. Your task is to review a course syllabus and provide detailed, constructive feedback on how well it meets WEM criteria.
 
