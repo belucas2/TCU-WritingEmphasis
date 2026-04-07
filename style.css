@@ -69,7 +69,7 @@ header {
 }
 
 .prize-logo {
-  height: 8px;
+  height: 16px;
   width: auto;
   object-fit: contain;
   opacity: 0.9;
