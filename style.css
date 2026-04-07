@@ -155,15 +155,162 @@ header {
   color: var(--tcu-purple);
 }
 
-/* Confidence level styling */
-.message-content em {
-  font-style: normal;
-  background: rgba(77, 25, 121, 0.08);
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-size: 0.85em;
+/* Confidence level badges - styled as inline code with color */
+.message-content code {
+  background: rgba(77, 25, 121, 0.1);
+  border: 1px solid rgba(77, 25, 121, 0.2);
   color: var(--tcu-purple);
-  font-weight: 500;
+  font-weight: 600;
+}
+
+/* ── Message Feedback ─────────────────────────────────────── */
+.message-feedback {
+  display: flex;
+  gap: 6px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  align-items: center;
+}
+
+.feedback-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 8px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.feedback-btn:hover {
+  background: var(--tcu-purple-bg);
+  border-color: var(--tcu-purple-light);
+  color: var(--tcu-purple);
+}
+
+.feedback-btn.active {
+  background: var(--tcu-purple);
+  border-color: var(--tcu-purple);
+  color: #fff;
+}
+
+.feedback-thanks {
+  font-size: 0.8rem;
+  color: var(--tcu-purple);
+  margin-left: 8px;
+  animation: fadeIn 0.3s;
+  transition: opacity 0.3s;
+}
+
+/* ── Feedback Modal ───────────────────────────────────────── */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.2s;
+}
+
+.modal-content {
+  background: var(--surface);
+  border-radius: var(--radius);
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  animation: slideUp 0.3s;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border);
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: var(--text);
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: all 0.15s;
+}
+
+.modal-close:hover {
+  background: var(--bg);
+  color: var(--text);
+}
+
+.modal-body {
+  padding: 24px;
+}
+
+.modal-body p {
+  margin: 0 0 12px 0;
+  color: var(--text);
+}
+
+.modal-body textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  resize: vertical;
+  min-height: 100px;
+  margin-bottom: 8px;
+}
+
+.modal-body textarea:focus {
+  outline: none;
+  border-color: var(--tcu-purple-light);
+  box-shadow: 0 0 0 3px rgba(77, 25, 121, 0.1);
+}
+
+.feedback-hint {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin: 0 !important;
+}
+
+.modal-footer {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  padding: 16px 24px;
+  border-top: 1px solid var(--border);
+  background: var(--bg);
+  border-radius: 0 0 var(--radius) var(--radius);
 }
 
 /* ── Citations ────────────────────────────────────────────── */
@@ -569,6 +716,32 @@ header {
   padding: 12px 16px;
   border-radius: 8px;
   font-size: 0.9rem;
+}
+
+/* ── Footer ───────────────────────────────────────────────── */
+footer {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+footer p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+footer .feedback-link {
+  color: var(--tcu-purple);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.15s;
+}
+
+footer .feedback-link:hover {
+  color: var(--tcu-purple-light);
+  text-decoration: underline;
 }
 
 /* ── Responsive ───────────────────────────────────────────── */

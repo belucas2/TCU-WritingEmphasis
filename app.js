@@ -282,6 +282,8 @@
   function appendAssistantMessage(text, citations) {
     const div = document.createElement('div');
     div.className = 'message assistant';
+    const messageId = 'msg-' + Date.now();
+    div.id = messageId;
 
     // Parse text: replace citation markers like 【4:0†source】 with numbered badges
     let htmlText = renderMarkdown(text);
@@ -292,6 +294,23 @@
     if (citations && citations.length > 0) {
       inner += renderCitations(citations);
     }
+    
+    // Add feedback buttons
+    inner += `
+      <div class="message-feedback">
+        <button class="feedback-btn" data-feedback="positive" data-message-id="${messageId}" title="Helpful response">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M8 2v8m0-8l3 3m-3-3L5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M2 12h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+        <button class="feedback-btn" data-feedback="negative" data-message-id="${messageId}" title="Needs improvement">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M8 14V6m0 8l3-3m-3 3l-3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M2 4h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>`;
 
     inner += '</div>';
     div.innerHTML = inner;
@@ -304,6 +323,11 @@
         hdr.nextElementSibling.classList.toggle('open');
       });
     }
+    
+    // Wire up feedback buttons
+    div.querySelectorAll('.feedback-btn').forEach(btn => {
+      btn.addEventListener('click', () => handleFeedback(btn));
+    });
 
     messagesEl.appendChild(div);
     scrollToBottom();
@@ -377,6 +401,123 @@
       messagesEl.appendChild(div);
       scrollToBottom();
     }
+  }
+
+  // ── Feedback handling ──────────────────────────────────────
+  function handleFeedback(btn) {
+    const feedbackType = btn.dataset.feedback;
+    const messageId = btn.dataset.messageId;
+    const messageEl = document.getElementById(messageId);
+    
+    // Mark button as active
+    const feedbackDiv = btn.parentElement;
+    feedbackDiv.querySelectorAll('.feedback-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    
+    // Show feedback form
+    showFeedbackModal(feedbackType, messageId, messageEl);
+  }
+  
+  function showFeedbackModal(feedbackType, messageId, messageEl) {
+    // Create modal if it doesn't exist
+    let modal = document.getElementById('feedback-modal');
+    if (!modal) {
+      modal = document.createElement('div');
+      modal.id = 'feedback-modal';
+      modal.className = 'modal';
+      modal.innerHTML = `
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3 id="feedback-title">Provide Feedback</h3>
+            <button class="modal-close" id="close-modal">&times;</button>
+          </div>
+          <div class="modal-body">
+            <p id="feedback-prompt">Help us improve! What could be better?</p>
+            <textarea id="feedback-comment" placeholder="Optional: Share specific details..." rows="4"></textarea>
+            <p class="feedback-hint">Your feedback helps improve the knowledge base for everyone.</p>
+          </div>
+          <div class="modal-footer">
+            <button class="btn-secondary" id="skip-feedback">Skip</button>
+            <button class="btn-primary" id="submit-feedback">Submit Feedback</button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modal);
+      
+      // Wire up modal controls
+      modal.querySelector('#close-modal').addEventListener('click', () => hideModal());
+      modal.querySelector('#skip-feedback').addEventListener('click', () => hideModal());
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) hideModal();
+      });
+    }
+    
+    // Update modal content
+    const title = modal.querySelector('#feedback-title');
+    const prompt = modal.querySelector('#feedback-prompt');
+    const commentBox = modal.querySelector('#feedback-comment');
+    const submitBtn = modal.querySelector('#submit-feedback');
+    
+    if (feedbackType === 'positive') {
+      title.textContent = '👍 Thank You!';
+      prompt.textContent = 'Great! Anything specific that was particularly helpful?';
+      commentBox.placeholder = 'Optional: What made this response helpful?';
+    } else {
+      title.textContent = '👎 Help Us Improve';
+      prompt.textContent = 'What could be better about this response?';
+      commentBox.placeholder = 'Optional: What was missing or incorrect?';
+    }
+    
+    commentBox.value = '';
+    
+    // Handle submit
+    submitBtn.onclick = () => {
+      const comment = commentBox.value.trim();
+      submitFeedback(feedbackType, messageId, comment, messageEl);
+      hideModal();
+    };
+    
+    // Show modal
+    modal.style.display = 'flex';
+    commentBox.focus();
+  }
+  
+  function hideModal() {
+    const modal = document.getElementById('feedback-modal');
+    if (modal) modal.style.display = 'none';
+  }
+  
+  async function submitFeedback(feedbackType, messageId, comment, messageEl) {
+    const feedbackData = {
+      type: feedbackType,
+      messageId: messageId,
+      comment: comment,
+      messageText: messageEl ? messageEl.querySelector('.message-content').innerText.substring(0, 500) : '',
+      timestamp: new Date().toISOString(),
+      url: window.location.href
+    };
+    
+    // Log to console for now (you can replace with API call)
+    console.log('Feedback submitted:', feedbackData);
+    
+    // Optional: Send to an API endpoint
+    // await fetch('/api/feedback', {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify(feedbackData)
+    // });
+    
+    // Show thank you message
+    const feedbackDiv = messageEl.querySelector('.message-feedback');
+    const thankYou = document.createElement('span');
+    thankYou.className = 'feedback-thanks';
+    thankYou.textContent = '✓ Thank you for your feedback!';
+    feedbackDiv.appendChild(thankYou);
+    
+    setTimeout(() => {
+      thankYou.style.opacity = '0';
+      setTimeout(() => thankYou.remove(), 300);
+    }, 3000);
   }
 
   // ── Reset chat ─────────────────────────────────────────────
