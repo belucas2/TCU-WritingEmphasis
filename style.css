@@ -346,6 +346,202 @@ header {
   margin-top: 8px;
 }
 
+/* ── Header Controls & Mode Switcher ──────────────────────── */
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mode-switcher {
+  display: flex;
+  gap: 4px;
+  background: var(--bg);
+  border-radius: 10px;
+  padding: 4px;
+  border: 1px solid var(--border);
+}
+
+.mode-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+  font-family: inherit;
+}
+
+.mode-btn:hover {
+  color: var(--text);
+  background: rgba(77, 25, 121, 0.06);
+}
+
+.mode-btn.active {
+  background: var(--tcu-purple);
+  color: #fff;
+}
+
+.mode-btn svg {
+  flex-shrink: 0;
+}
+
+/* ── Syllabus Review UI ───────────────────────────────────── */
+.wem-criteria {
+  margin: 12px 0 12px 20px;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.wem-criteria li {
+  margin-bottom: 8px;
+}
+
+.help-text {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-top: 12px !important;
+}
+
+.review-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.file-upload-area {
+  background: var(--surface);
+  border: 2px dashed var(--border);
+  border-radius: var(--radius);
+  padding: 32px 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.file-upload-area:hover {
+  border-color: var(--tcu-purple-light);
+  background: var(--tcu-purple-bg);
+}
+
+.file-upload-area.drag-over {
+  border-color: var(--tcu-purple);
+  background: var(--tcu-purple-bg);
+  border-style: solid;
+}
+
+.upload-icon {
+  color: var(--tcu-purple-light);
+  margin-bottom: 12px;
+}
+
+.upload-text {
+  font-size: 0.95rem;
+  color: var(--text);
+  margin-bottom: 4px !important;
+}
+
+.upload-hint {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin: 0 !important;
+}
+
+.file-selected {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.file-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+}
+
+.file-info svg {
+  color: var(--tcu-purple);
+  flex-shrink: 0;
+}
+
+.file-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.file-name {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0 !important;
+}
+
+.file-size {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin: 0 !important;
+}
+
+.btn-primary {
+  background: var(--tcu-purple);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 24px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-primary:not(:disabled):hover {
+  background: var(--tcu-purple-light);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(77, 25, 121, 0.2);
+}
+
+.btn-secondary {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-secondary:hover {
+  background: #fff0f0;
+  border-color: #ffcccc;
+  color: #cc3333;
+}
+
 /* ── Error ────────────────────────────────────────────────── */
 .error-msg {
   background: #fff0f0;

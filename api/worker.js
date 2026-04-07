@@ -25,6 +25,58 @@ When answering questions:
 - Be concise but thorough. Prefer concrete examples from the sources.
 - Format responses in Markdown for readability.`;
 
+const WEM_REVIEW_PROMPT = `You are an expert evaluator for TCU's Writing Emphasis Module (WEM) course submissions. Your task is to review a course syllabus and provide detailed, constructive feedback on how well it meets WEM criteria.
+
+## WEM Background
+The Writing Emphasis competence (WEM) builds on foundational writing skills by situating them in the practices and conventions of a target discipline or field of study. WEM courses focus on the ability to employ composing, editing, and revision strategies as a means of producing discipline-specific writing.
+
+The WEM requirement is designed to engage students in learning writing from the perspectives and practices of disciplinary specialists. Courses fulfilling this requirement must explicitly teach writing and revision strategies and support that teaching through formative feedback, not just grades based on displays of content retention.
+
+## Your Task
+Analyze the uploaded syllabus against these four WEM criteria:
+
+### 1. Explicit WEM Instruction
+**Requirement:** The course syllabus explicitly dedicates class time to teach writing and revision concepts and communicates clearly the aims and outcomes of a WEM course.
+
+**Your evaluation should address:**
+- Does the syllabus dedicate specific class sessions or time to writing instruction?
+- Are WEM-specific learning outcomes clearly stated?
+- Is the purpose of writing instruction in this discipline made explicit?
+
+### 2. Multiple Writing Forms
+**Requirement:** Instruction about multiple forms of writing will be provided with attention to typical forms, language use strategies, and audience expectations.
+
+**Your evaluation should address:**
+- Does the syllabus include multiple types/genres of writing assignments?
+- Is attention given to discipline-specific conventions, language use, and audience?
+- Are students exposed to varied forms of written communication in the field?
+
+### 3. Formative Feedback Throughout Semester
+**Requirement:** Students will work with instructor feedback throughout the semester. Simply assigning and grading writing tasks does not equal teaching writing skills or concepts.
+
+**Your evaluation should address:**
+- Are there opportunities for students to receive feedback before final submission?
+- Is there evidence of drafting, revision, or peer review processes?
+- Does the feedback structure support learning rather than just evaluation?
+
+### 4. Process Focus with Reflection
+**Requirement:** The focus is on reinforcing writing and revision processes for students while guiding them through specialist contexts. Students will reflect on, and demonstrate awareness of, those processes.
+
+**Your evaluation should address:**
+- Does the syllabus emphasize process over product?
+- Are there opportunities for metacognitive reflection on writing practices?
+- Do students engage with writing as a knowledge-making activity?
+
+## Response Format
+For each criterion (1-4), provide:
+- **Assessment:** "Satisfactory", "Needs Development", or "Not Evident"
+- **Evidence:** Specific references to what you found (or didn't find) in the syllabus
+- **Recommendations:** Concrete, actionable suggestions for improvement (if applicable)
+
+End with an **Overall Summary** noting strengths and priority areas for revision.
+
+Be constructive, specific, and helpful. Your feedback should guide the instructor toward WEM approval.`;
+
 // Simple in-memory rate limiter (per-isolate, resets on redeploy)
 const rateBuckets = new Map();
 const RATE_LIMIT = 20;       // requests
@@ -40,6 +92,11 @@ export default {
     // ── Route: POST /api/chat ──────────────────────────────
     if (request.method === 'POST' && new URL(request.url).pathname === '/api/chat') {
       return corsResponse(env, await handleChat(request, env));
+    }
+    
+    // ── Route: POST /api/review ────────────────────────────
+    if (request.method === 'POST' && new URL(request.url).pathname === '/api/review') {
+      return corsResponse(env, await handleReview(request, env));
     }
 
     // ── Health check ───────────────────────────────────────
@@ -119,6 +176,124 @@ async function handleChat(request, env) {
   // ── Parse response ───────────────────────────────────────
   const result = parseResponse(oaiData);
   return jsonResponse(result, 200);
+}
+
+// ── Syllabus Review Handler ────────────────────────────────
+async function handleReview(request, env) {
+  // Rate limiting by IP
+  const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
+  if (isRateLimited(ip)) {
+    return jsonResponse({ error: 'Rate limit exceeded. Please wait a moment.' }, 429);
+  }
+
+  let formData;
+  try {
+    formData = await request.formData();
+  } catch {
+    return jsonResponse({ error: 'Invalid form data' }, 400);
+  }
+
+  const file = formData.get('file');
+  if (!file) {
+    return jsonResponse({ error: 'File is required' }, 400);
+  }
+
+  // Validate file type
+  const allowedTypes = ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'text/plain'];
+  if (!allowedTypes.includes(file.type)) {
+    return jsonResponse({ error: 'Invalid file type. Please upload PDF, Word (.docx), or text (.txt)' }, 400);
+  }
+
+  // Validate file size (10MB max)
+  if (file.size > 10 * 1024 * 1024) {
+    return jsonResponse({ error: 'File size must be less than 10MB' }, 400);
+  }
+
+  // ── Upload file to OpenAI ──────────────────────────────────
+  const uploadForm = new FormData();
+  uploadForm.append('file', file);
+  uploadForm.append('purpose', 'assistants');
+
+  let uploadRes;
+  try {
+    uploadRes = await fetch('https://api.openai.com/v1/files', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${env.OPENAI_API_KEY}`,
+      },
+      body: uploadForm,
+    });
+  } catch (err) {
+    return jsonResponse({ error: 'Failed to upload file to OpenAI' }, 502);
+  }
+
+  if (!uploadRes.ok) {
+    const errText = await uploadRes.text().catch(() => 'Unknown error');
+    console.error('OpenAI file upload error:', uploadRes.status, errText);
+    return jsonResponse({ error: 'Failed to upload file. Please try again.' }, 502);
+  }
+
+  const fileData = await uploadRes.json();
+  const fileId = fileData.id;
+
+  // ── Call OpenAI Responses API with file ────────────────────
+  const oaiBody = {
+    model: MODEL,
+    instructions: WEM_REVIEW_PROMPT,
+    input: 'Please analyze this syllabus against the four WEM criteria and provide detailed feedback.',
+    files: [fileId],
+    tools: [{
+      type: 'file_search',
+      vector_store_ids: [VECTOR_STORE_ID],
+    }],
+  };
+
+  let oaiRes;
+  try {
+    oaiRes = await fetch('https://api.openai.com/v1/responses', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${env.OPENAI_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(oaiBody),
+    });
+  } catch (err) {
+    // Clean up uploaded file
+    await cleanupFile(env, fileId);
+    return jsonResponse({ error: 'Failed to reach OpenAI API' }, 502);
+  }
+
+  if (!oaiRes.ok) {
+    const errText = await oaiRes.text().catch(() => 'Unknown error');
+    console.error('OpenAI error:', oaiRes.status, errText);
+    // Clean up uploaded file
+    await cleanupFile(env, fileId);
+    return jsonResponse({ error: 'The AI service returned an error. Please try again.' }, 502);
+  }
+
+  const oaiData = await oaiRes.json();
+
+  // ── Clean up uploaded file ─────────────────────────────────
+  await cleanupFile(env, fileId);
+
+  // ── Parse response ─────────────────────────────────────────
+  const result = parseResponse(oaiData);
+  return jsonResponse(result, 200);
+}
+
+// ── Clean up temporary file ────────────────────────────────
+async function cleanupFile(env, fileId) {
+  try {
+    await fetch(`https://api.openai.com/v1/files/${fileId}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${env.OPENAI_API_KEY}`,
+      },
+    });
+  } catch (err) {
+    console.error('Failed to delete file:', fileId, err);
+  }
 }
 
 // ── Parse the Responses API output ─────────────────────────

@@ -5,6 +5,7 @@
 
   // ── Configuration ──────────────────────────────────────────
   const API_URL = 'https://tcu-wac-api.tcu-wem.workers.dev/api/chat';
+  const API_REVIEW_URL = 'https://tcu-wac-api.tcu-wem.workers.dev/api/review';
   // CloudFlare Worker deployed and configured
 
   // ── DOM refs ───────────────────────────────────────────────
@@ -12,13 +13,39 @@
   const inputEl    = document.getElementById('user-input');
   const sendBtn    = document.getElementById('send-btn');
   const newChatBtn = document.getElementById('new-chat-btn');
+  
+  // Mode switcher
+  const modeChatBtn = document.getElementById('mode-chat');
+  const modeReviewBtn = document.getElementById('mode-review');
+  
+  // Review mode elements
+  const fileInput = document.getElementById('file-input');
+  const fileUploadArea = document.getElementById('file-upload-area');
+  const fileSelected = document.getElementById('file-selected');
+  const fileName = document.getElementById('file-name');
+  const fileSize = document.getElementById('file-size');
+  const removeFileBtn = document.getElementById('remove-file-btn');
+  const reviewBtn = document.getElementById('review-btn');
+  
+  // Input wrappers
+  const chatInputWrapper = document.getElementById('chat-input-wrapper');
+  const reviewInputWrapper = document.getElementById('review-input-wrapper');
+  const disclaimerChat = document.getElementById('disclaimer-chat');
+  const disclaimerReview = document.getElementById('disclaimer-review');
+  
+  // Welcome messages
+  const welcomeChat = document.querySelector('.welcome-chat');
+  const welcomeReview = document.querySelector('.welcome-review');
 
   // ── State ──────────────────────────────────────────────────
   let previousResponseId = null;
   let isLoading = false;
+  let currentMode = 'chat';
+  let selectedFile = null;
 
   // ── Initialize ─────────────────────────────────────────────
   function init() {
+    // Chat mode listeners
     sendBtn.addEventListener('click', handleSend);
     newChatBtn.addEventListener('click', resetChat);
     inputEl.addEventListener('keydown', (e) => {
@@ -40,8 +67,116 @@
         handleSend();
       });
     });
+    
+    // Mode switcher
+    modeChatBtn.addEventListener('click', () => switchMode('chat'));
+    modeReviewBtn.addEventListener('click', () => switchMode('review'));
+    
+    // File upload listeners
+    fileUploadArea.addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', handleFileSelection);
+    removeFileBtn.addEventListener('click', clearSelectedFile);
+    reviewBtn.addEventListener('click', handleReview);
+    
+    // Drag and drop
+    fileUploadArea.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      fileUploadArea.classList.add('drag-over');
+    });
+    fileUploadArea.addEventListener('dragleave', () => {
+      fileUploadArea.classList.remove('drag-over');
+    });
+    fileUploadArea.addEventListener('drop', (e) => {
+      e.preventDefault();
+      fileUploadArea.classList.remove('drag-over');
+      const files = e.dataTransfer.files;
+      if (files.length > 0) {
+        handleFile(files[0]);
+      }
+    });
 
     inputEl.focus();
+  }
+  
+  // ── Mode Switching ─────────────────────────────────────────
+  function switchMode(mode) {
+    currentMode = mode;
+    
+    // Update mode buttons
+    modeChatBtn.classList.toggle('active', mode === 'chat');
+    modeReviewBtn.classList.toggle('active', mode === 'review');
+    
+    // Show/hide input areas
+    chatInputWrapper.style.display = mode === 'chat' ? 'flex' : 'none';
+    reviewInputWrapper.style.display = mode === 'review' ? 'flex' : 'none';
+    disclaimerChat.style.display = mode === 'chat' ? 'block' : 'none';
+    disclaimerReview.style.display = mode === 'review' ? 'block' : 'none';
+    
+    // Show/hide welcome messages
+    welcomeChat.style.display = mode === 'chat' ? 'block' : 'none';
+    welcomeReview.style.display = mode === 'review' ? 'block' : 'none';
+    
+    // Clear existing messages (except welcome)
+    const messages = messagesEl.querySelectorAll('.message:not(.welcome-chat):not(.welcome-review)');
+    messages.forEach(msg => msg.remove());
+    
+    // Reset state
+    previousResponseId = null;
+    selectedFile = null;
+    clearSelectedFile();
+    
+    if (mode === 'chat') {
+      inputEl.focus();
+    }
+  }
+  
+  // ── File Handling ──────────────────────────────────────────
+  function handleFileSelection(e) {
+    const file = e.target.files[0];
+    if (file) {
+      handleFile(file);
+    }
+  }
+  
+  function handleFile(file) {
+    // Validate file type
+    const allowedTypes = ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'text/plain'];
+    const allowedExts = ['.pdf', '.docx', '.txt'];
+    const fileExt = '.' + file.name.split('.').pop().toLowerCase();
+    
+    if (!allowedTypes.includes(file.type) && !allowedExts.includes(fileExt)) {
+      alert('Please upload a PDF, Word document (.docx), or text file (.txt)');
+      return;
+    }
+    
+    // Validate file size (10MB max)
+    if (file.size > 10 * 1024 * 1024) {
+      alert('File size must be less than 10MB');
+      return;
+    }
+    
+    selectedFile = file;
+    
+    // Update UI
+    fileUploadArea.style.display = 'none';
+    fileSelected.style.display = 'flex';
+    fileName.textContent = file.name;
+    fileSize.textContent = formatFileSize(file.size);
+    reviewBtn.disabled = false;
+  }
+  
+  function clearSelectedFile() {
+    selectedFile = null;
+    fileInput.value = '';
+    fileUploadArea.style.display = 'block';
+    fileSelected.style.display = 'none';
+    reviewBtn.disabled = true;
+  }
+  
+  function formatFileSize(bytes) {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
   }
 
   // ── Textarea auto-resize ───────────────────────────────────
@@ -56,8 +191,8 @@
     if (!text || isLoading) return;
 
     // Remove welcome panel on first message
-    const welcome = document.querySelector('.welcome');
-    if (welcome) welcome.remove();
+    const welcome = document.querySelector('.welcome-chat');
+    if (welcome) welcome.style.display = 'none';
 
     appendUserMessage(text);
     inputEl.value = '';
@@ -73,6 +208,28 @@
     } finally {
       setLoading(false);
       inputEl.focus();
+    }
+  }
+  
+  // ── Handle Syllabus Review ─────────────────────────────────
+  async function handleReview() {
+    if (!selectedFile || isLoading) return;
+    
+    // Hide welcome message
+    welcomeReview.style.display = 'none';
+    
+    // Show upload confirmation
+    appendUserMessage(`Uploaded: ${selectedFile.name}`);
+    setLoading(true);
+    
+    try {
+      const data = await callReviewApi(selectedFile);
+      appendAssistantMessage(data.text, data.citations || []);
+    } catch (err) {
+      appendError(err.message || 'Failed to analyze syllabus. Please try again.');
+    } finally {
+      setLoading(false);
+      clearSelectedFile();
     }
   }
 
@@ -92,6 +249,24 @@
       throw new Error(errBody?.error || `Request failed (${res.status})`);
     }
 
+    return res.json();
+  }
+  
+  // ── Review API call ────────────────────────────────────────
+  async function callReviewApi(file) {
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    const res = await fetch(API_REVIEW_URL, {
+      method: 'POST',
+      body: formData,
+    });
+    
+    if (!res.ok) {
+      const errBody = await res.json().catch(() => null);
+      throw new Error(errBody?.error || `Request failed (${res.status})`);
+    }
+    
     return res.json();
   }
 
@@ -207,36 +382,24 @@
   // ── Reset chat ─────────────────────────────────────────────
   function resetChat() {
     previousResponseId = null;
-    messagesEl.innerHTML = '';
-    addWelcome();
+    selectedFile = null;
+    
+    // Clear all messages except welcome messages
+    const messages = messagesEl.querySelectorAll('.message:not(.welcome-chat):not(.welcome-review)');
+    messages.forEach(msg => msg.remove());
+    
+    // Show appropriate welcome message
+    welcomeChat.style.display = currentMode === 'chat' ? 'block' : 'none';
+    welcomeReview.style.display = currentMode === 'review' ? 'block' : 'none';
+    
+    // Reset inputs
     inputEl.value = '';
     inputEl.style.height = 'auto';
-    inputEl.focus();
-  }
-
-  function addWelcome() {
-    const div = document.createElement('div');
-    div.className = 'welcome';
-    div.innerHTML = `
-      <h2>Welcome to the WAC/WID Knowledge Base</h2>
-      <p>Ask questions about Writing Across the Curriculum and Writing in the Disciplines scholarship — spanning decades of research from journals, book chapters, and more.</p>
-      <div class="suggested-questions">
-        <p class="suggestions-label">Try asking about:</p>
-        <button class="suggestion">Key principles of Writing Across the Curriculum</button>
-        <button class="suggestion">How are WI courses designed across disciplines?</button>
-        <button class="suggestion">What does research say about peer review in writing?</button>
-        <button class="suggestion">Strategies for faculty development in WAC programs</button>
-      </div>`;
-    messagesEl.appendChild(div);
-
-    // Wire up suggestion buttons
-    div.querySelectorAll('.suggestion').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        inputEl.value = btn.dataset.q || btn.textContent;
-        sendBtn.disabled = false;
-        handleSend();
-      });
-    });
+    clearSelectedFile();
+    
+    if (currentMode === 'chat') {
+      inputEl.focus();
+    }
   }
 
   // ── Utilities ──────────────────────────────────────────────

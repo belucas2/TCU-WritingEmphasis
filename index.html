@@ -22,15 +22,28 @@
           <p class="subtitle">WAC / WID Knowledge Base</p>
         </div>
       </div>
-      <button id="new-chat-btn" title="New conversation" aria-label="New conversation">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-      </button>
+      <div class="header-controls">
+        <div class="mode-switcher">
+          <button id="mode-chat" class="mode-btn active" data-mode="chat">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M2 6h14M2 10h10M2 14h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            Ask Questions
+          </button>
+          <button id="mode-review" class="mode-btn" data-mode="review">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M15 3v12a1 1 0 01-1 1H4a1 1 0 01-1-1V3m12 0H3m12 0a1 1 0 00-1-1H4a1 1 0 00-1 1" stroke="currentColor" stroke-width="1.5"/><path d="M6 7h6M6 10h6M6 13h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            Syllabus Review
+          </button>
+        </div>
+        <button id="new-chat-btn" title="New conversation" aria-label="New conversation">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
     </div>
   </header>
 
   <main id="chat">
     <div id="messages">
-      <div class="message assistant">
+      <!-- Chat Mode Welcome -->
+      <div class="message assistant welcome-chat">
         <div class="message-content">
           <p>Welcome! I'm the <strong>TCU Writing Emphasis</strong> knowledge base assistant. I can help you explore scholarship on Writing Across the Curriculum (WAC) and Writing in the Disciplines (WID).</p>
           <p>I have access to nearly 4,000 scholarly chapters and journal articles from the WAC Clearinghouse and related collections. Ask me anything about writing pedagogy, WAC program design, writing-intensive courses, or WID research.</p>
@@ -43,16 +56,64 @@
           </div>
         </div>
       </div>
+      
+      <!-- Syllabus Review Mode Welcome -->
+      <div class="message assistant welcome-review" style="display: none;">
+        <div class="message-content">
+          <h2>Syllabus Review for Writing Emphasis (WEM)</h2>
+          <p>Upload your course syllabus to receive feedback on its <strong>Writing Emphasis Module (WEM)</strong> components. I'll evaluate your syllabus against TCU's four key WEM criteria:</p>
+          <ol class="wem-criteria">
+            <li><strong>Explicit WEM instruction</strong> — Class time dedicated to WEM concepts with clear aims and outcomes</li>
+            <li><strong>Multiple writing forms</strong> — Instruction on various forms with attention to language use and audience</li>
+            <li><strong>Formative feedback</strong> — Student work with instructor feedback throughout the semester</li>
+            <li><strong>Process & reflection</strong> — Focus on writing/revision processes with student awareness</li>
+          </ol>
+          <p class="help-text">Accepted formats: PDF, Word (.docx), or plain text (.txt)</p>
+        </div>
+      </div>
     </div>
 
     <div id="input-area">
-      <div class="input-wrapper">
+      <!-- Chat Mode Input -->
+      <div class="input-wrapper" id="chat-input-wrapper">
         <textarea id="user-input" placeholder="Ask about WAC/WID scholarship…" rows="1" aria-label="Your question"></textarea>
         <button id="send-btn" title="Send message" aria-label="Send message" disabled>
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 10h14M12 5l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
       </div>
-      <p class="disclaimer">Responses are AI-generated from indexed scholarship. Always verify citations against original sources.</p>
+      
+      <!-- Syllabus Review Mode Input -->
+      <div class="review-wrapper" id="review-input-wrapper" style="display: none;">
+        <div class="file-upload-area" id="file-upload-area">
+          <input type="file" id="file-input" accept=".pdf,.docx,.txt" hidden>
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" class="upload-icon">
+            <rect x="8" y="12" width="32" height="28" rx="2" stroke="currentColor" stroke-width="2" fill="none"/>
+            <path d="M16 12v-2a2 2 0 012-2h12a2 2 0 012 2v2" stroke="currentColor" stroke-width="2"/>
+            <path d="M24 20v12m-4-4l4-4 4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <p class="upload-text"><strong>Click to upload</strong> or drag and drop</p>
+          <p class="upload-hint">PDF, Word (.docx), or Text (.txt) — Max 10MB</p>
+        </div>
+        <div class="file-selected" id="file-selected" style="display: none;">
+          <div class="file-info">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M13 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V9l-7-7z" stroke="currentColor" stroke-width="2"/>
+              <path d="M13 2v7h7" stroke="currentColor" stroke-width="2"/>
+            </svg>
+            <div class="file-details">
+              <p class="file-name" id="file-name"></p>
+              <p class="file-size" id="file-size"></p>
+            </div>
+          </div>
+          <button id="remove-file-btn" class="btn-secondary" title="Remove file">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 4l10 10M14 4L4 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+        <button id="review-btn" class="btn-primary" disabled>Analyze Syllabus</button>
+      </div>
+      
+      <p class="disclaimer" id="disclaimer-chat">Responses are AI-generated from indexed scholarship. Always verify citations against original sources.</p>
+      <p class="disclaimer" id="disclaimer-review" style="display: none;">Review feedback is AI-generated based on TCU's WEM criteria. Final approval decisions rest with the WEM committee.</p>
     </div>
   </main>
 
