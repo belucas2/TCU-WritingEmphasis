@@ -380,7 +380,10 @@
       currentEl = currentEl.nextElementSibling;
     }
     
-    console.log('Elements to move into accordion:', elementsToMove.length, elementsToMove);
+    console.log('=== ACCORDION DEBUG ===');
+    console.log('H2 found:', confidenceLevelsH2.textContent);
+    console.log('Elements to move:', elementsToMove.length);
+    console.log('Element types:', elementsToMove.map(el => el.tagName + (el.textContent ? ' - ' + el.textContent.substring(0, 50) : '')));
     
     // Now move all collected elements into accordion
     elementsToMove.forEach(el => {
