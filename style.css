@@ -63,6 +63,23 @@ header {
   font-weight: 400;
 }
 
+.prize-badge {
+  margin-left: auto;
+  margin-right: 12px;
+}
+
+.prize-logo {
+  height: 36px;
+  width: auto;
+  object-fit: contain;
+  opacity: 0.9;
+  transition: opacity 0.15s;
+}
+
+.prize-logo:hover {
+  opacity: 1;
+}
+
 #new-chat-btn {
   background: none;
   border: 1px solid var(--border);
