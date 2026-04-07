@@ -156,12 +156,17 @@ header {
 .message-content p:last-child { margin-bottom: 0; }
 .message-content ul, .message-content ol { margin: 0.4em 0 0.6em 1.5em; }
 .message-content li { margin-bottom: 0.3em; }
+
+/* Confidence level badges and inline code */
 .message-content code {
-  background: rgba(0, 0, 0, 0.06);
+  background: rgba(0, 0, 0, 0.04);
   padding: 2px 5px;
-  border-radius: 4px;
-  font-size: 0.9em;
+  border-radius: 3px;
+  font-size: 0.7em;
+  color: #666;
+  font-weight: 400;
 }
+
 .message-content strong { font-weight: 600; }
 
 .message-content h3 {
@@ -170,17 +175,6 @@ header {
   margin-top: 16px;
   margin-bottom: 8px;
   color: var(--tcu-purple);
-}
-
-/* Confidence level badges - styled as inline code with color */
-.message-content code {
-  background: transparent;
-  border: none;
-  color: #999;
-  font-weight: 400;
-  font-size: 0.5em;
-  vertical-align: baseline;
-  padding: 0 2px;
 }
 
 /* ── Message Feedback ─────────────────────────────────────── */
