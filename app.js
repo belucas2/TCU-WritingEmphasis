@@ -384,16 +384,7 @@
     console.log('H2 found:', confidenceLevelsH2.textContent);
     console.log('Elements to move:', elementsToMove.length);
     console.log('Element types:', elementsToMove.map(el => el.tagName + (el.textContent ? ' - ' + el.textContent.substring(0, 100) : '')));
-    
-    // Debug: show each element's structure
-    const debugDiv = document.createElement('div');
-    debugDiv.style.cssText = 'background: #fff3cd; padding: 10px; margin: 10px 0; border: 2px solid #856404; font-size: 11px; font-family: monospace;';
-    debugDiv.innerHTML = '<strong>DEBUG - Elements found:</strong><br>' + 
-      elementsToMove.map((el, i) => {
-        return (i+1) + '. ' + el.tagName + ': "' + (el.textContent || '').substring(0, 80).replace(/</g, '&lt;').replace(/>/g, '&gt;') + '..."';
-      }).join('<br>');
-    accordionContent.appendChild(debugDiv);
-    
+
     // Now move all collected elements into accordion
     elementsToMove.forEach(el => {
       accordionContent.appendChild(el);

@@ -382,11 +382,54 @@ function parseResponse(data) {
     }
   }
 
+  // Ensure Confidence Levels entries always cover all end-note references.
+  text = normalizeConfidenceLevels(text);
+
   return {
     text: text || 'I was not able to find relevant information. Please try rephrasing your question.',
     citations,
     responseId: data.id || null,
   };
+}
+
+function normalizeConfidenceLevels(text) {
+  if (!text) return text;
+
+  const headingMatch = text.match(/\n##\s*Confidence Levels\b/i);
+  if (!headingMatch) return text;
+
+  const headingIndex = headingMatch.index;
+  const mainPart = text.slice(0, headingIndex);
+  const confidencePart = text.slice(headingIndex);
+
+  // Find highest end-note reference used in the main response body.
+  let highestRef = 0;
+  for (const m of mainPart.matchAll(/\[(\d+)\]/g)) {
+    const n = parseInt(m[1], 10);
+    if (Number.isFinite(n) && n > highestRef) highestRef = n;
+  }
+  if (highestRef === 0) return text;
+
+  // Track which confidence entries already exist.
+  const existingEntries = new Set();
+  for (const m of confidencePart.matchAll(/\*\*\[(\d+)\]\s*\d+%\*\*/g)) {
+    const n = parseInt(m[1], 10);
+    if (Number.isFinite(n)) existingEntries.add(n);
+  }
+
+  const missing = [];
+  for (let i = 1; i <= highestRef; i++) {
+    if (!existingEntries.has(i)) missing.push(i);
+  }
+  if (missing.length === 0) return text;
+
+  const filler = missing
+    .map((n) => {
+      return `\n\n**[${n}] 60%**\n- Confidence entry was not provided in the original model output.\n- Please request a refresh for full APA citations for this end-note.\n- Placeholder entry auto-added to keep end-note numbering complete.`;
+    })
+    .join('');
+
+  return `${text}${filler}`;
 }
 
 // ── Rate limiter ───────────────────────────────────────────
