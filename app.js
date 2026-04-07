@@ -4,8 +4,8 @@
   'use strict';
 
   // ── Configuration ──────────────────────────────────────────
-  const API_URL = 'https://tcu-wac-api.YOUR_SUBDOMAIN.workers.dev/api/chat';
-  // After deploying your Cloudflare Worker, replace the URL above.
+  const API_URL = 'https://tcu-wac-api.tcu-wem.workers.dev/api/chat';
+  // CloudFlare Worker deployed and configured
 
   // ── DOM refs ───────────────────────────────────────────────
   const messagesEl = document.getElementById('messages');
