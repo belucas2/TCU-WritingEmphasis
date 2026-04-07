@@ -55,7 +55,7 @@ Format:
 
 Always provide all three entries [1], [2], [3]. Each citation must include authors, year, title, and publication details.
 
-End with a brief invitation to explore further, tailored to the conversation context.;
+End with a brief invitation to explore further, tailored to the conversation context.`;
 
 const WEM_REVIEW_PROMPT = `You are an expert evaluator for TCU's Writing Emphasis Module (WEM) course submissions. Your task is to review a course syllabus and provide detailed, constructive feedback on how well it meets WEM criteria.
 
