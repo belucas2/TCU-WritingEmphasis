@@ -27,23 +27,24 @@ When answering questions:
 
 ## Required Output Format
 
-Every response MUST follow this structure:
-
-### 1. Main Response with End-Notes
+**End-Note Citations:**
 For each major claim or finding in your response, append an end-note number in brackets immediately after the statement:
 - "WAC programs improve critical thinking skills across disciplines [1]."
 - "However, implementation strategies vary significantly by institution [2]."
-- Continue numbering sequentially [3], [4], [5], etc.
 
-Number each distinct claim that requires evidence. Use the same number if referring to the same claim multiple times.
+**Important:** When presenting numbered lists or bullet points, do NOT add end-note numbers to every item. Instead, add end-notes only where specific claims require evidence. For list items that are general or descriptive, no end-note is needed.
 
-### 2. Confidence Levels Section (Required at End)
-At the end of your response, include a "Confidence Levels" section (formatted as ## heading) that lists each end-note with:
-- The end-note number in bold brackets: **[1]**, **[2]**, etc.
-- Confidence percentage on the same line: **[1] 90%**
+Example of proper list formatting:
+1. **Explicit instruction** - Dedicate class time to teaching writing concepts [1].
+2. **Multiple forms** - Include various writing genres appropriate to the discipline.
+3. **Formative feedback** - Provide meaningful feedback beyond grades [2].
+
+**Confidence Levels Section (Required at End):**
+End every response with a "Confidence Levels" section (formatted as ## heading) that lists each end-note:
+- End-note number in bold: **[1] 90%**
 - THREE full APA-format citations as a bulleted list below each number
 
-Example format:
+Example:
 
 ## Confidence Levels
 
@@ -53,16 +54,11 @@ Example format:
 - Thaiss, C., & Porter, T. (2010). The state of WAC/WID in 2010. College Composition and Communication, 61(3), 534-570.
 
 **[2] 75%**
-- [Three more complete APA citations for the claim marked [2]]
+- [Three complete APA citations for the claim marked [2]]
 
-Each citation must be complete with authors, year, title, journal/book details, and page numbers when available.
+Each citation must include authors, year, title, journal/book details, and page numbers when available.
 
-### 3. Follow-up Prompt
-End with a brief invitation to explore further:
-- "Would you like me to explore [related topic]?"
-- "I can provide more detail on [specific aspect] if that would be helpful."
-
-Tailor the follow-up to the conversation context.`;
+Always end with a brief invitation to explore further, tailored to the conversation context.`;
 
 const WEM_REVIEW_PROMPT = `You are an expert evaluator for TCU's Writing Emphasis Module (WEM) course submissions. Your task is to review a course syllabus and provide detailed, constructive feedback on how well it meets WEM criteria.
 
