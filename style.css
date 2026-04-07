@@ -51,7 +51,7 @@ header {
 }
 
 .tcu-logo {
-  height: 40px;
+  height: 16px;
   width: auto;
   object-fit: contain;
 }
@@ -75,7 +75,7 @@ header {
 }
 
 .prize-logo {
-  height: 18px;
+  height: 16px;
   width: auto;
   object-fit: contain;
   opacity: 0.9;
