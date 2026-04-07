@@ -50,12 +50,6 @@ header {
   gap: 12px;
 }
 
-.tcu-logo {
-  height: 16px;
-  width: auto;
-  object-fit: contain;
-}
-
 .logo h1 {
   font-size: 1.1rem;
   font-weight: 600;
@@ -481,6 +475,18 @@ header {
 #input-area {
   padding: 12px 20px 16px;
   background: var(--bg);
+}
+
+.logo-centered {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.tcu-logo-main {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+  opacity: 0.9;
 }
 
 .input-wrapper {
