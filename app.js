@@ -366,29 +366,35 @@
     const accordionContent = document.createElement('div');
     accordionContent.className = 'confidence-accordion-content';
 
-    // Get all child elements of messageContent
-    const allChildren = Array.from(messageContent.children);
-    const h2Index = allChildren.indexOf(confidenceLevelsH2);
-    
-    // Collect all elements after the h2 (excluding feedback div)
+    // Collect all siblings after h2 until we hit message-feedback
+    let currentEl = confidenceLevelsH2.nextElementSibling;
     const elementsToMove = [];
-    for (let i = h2Index + 1; i < allChildren.length; i++) {
-      const child = allChildren[i];
-      if (child.classList.contains('message-feedback')) {
+    
+    while (currentEl) {
+      // Stop if we hit the feedback div
+      if (currentEl.classList && currentEl.classList.contains('message-feedback')) {
         break;
       }
-      elementsToMove.push(child);
+      // Collect this element
+      elementsToMove.push(currentEl);
+      // Get next sibling BEFORE we move the current one
+      currentEl = currentEl.nextElementSibling;
     }
     
-    // Move collected elements into accordion
-    elementsToMove.forEach(el => accordionContent.appendChild(el));
+    console.log('Elements to move into accordion:', elementsToMove.length, elementsToMove);
+    
+    // Now move all collected elements into accordion
+    elementsToMove.forEach(el => {
+      accordionContent.appendChild(el);
+    });
 
     // Build the accordion structure
     accordionWrapper.appendChild(accordionHeader);
     accordionWrapper.appendChild(accordionContent);
 
-    // Replace the h2 with the accordion
-    confidenceLevelsH2.parentNode.replaceChild(accordionWrapper, confidenceLevelsH2);
+    // Insert accordion where h2 was
+    confidenceLevelsH2.parentNode.insertBefore(accordionWrapper, confidenceLevelsH2);
+    confidenceLevelsH2.remove();
 
     // Add click handler to toggle
     accordionHeader.addEventListener('click', () => {
