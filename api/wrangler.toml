@@ -1,0 +1,11 @@
+name = "tcu-wac-api"
+main = "worker.js"
+compatibility_date = "2025-01-01"
+
+# After deployment, set your OpenAI API key:
+#   npx wrangler secret put OPENAI_API_KEY
+#
+# Then paste your key when prompted.
+
+[vars]
+ALLOWED_ORIGIN = "https://YOUR_GITHUB_USERNAME.github.io"

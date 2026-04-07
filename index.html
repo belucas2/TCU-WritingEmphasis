@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TCU Writing Emphasis — WAC/WID Knowledge Base</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <div class="logo">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+          <rect width="32" height="32" rx="8" fill="#4D1979"/>
+          <path d="M8 10h16M8 16h12M8 22h14" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+        <div>
+          <h1>TCU Writing Emphasis</h1>
+          <p class="subtitle">WAC / WID Knowledge Base</p>
+        </div>
+      </div>
+      <button id="new-chat-btn" title="New conversation" aria-label="New conversation">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main id="chat">
+    <div id="messages">
+      <div class="message assistant">
+        <div class="message-content">
+          <p>Welcome! I'm the <strong>TCU Writing Emphasis</strong> knowledge base assistant. I can help you explore scholarship on Writing Across the Curriculum (WAC) and Writing in the Disciplines (WID).</p>
+          <p>I have access to nearly 4,000 scholarly chapters and journal articles from the WAC Clearinghouse and related collections. Ask me anything about writing pedagogy, WAC program design, writing-intensive courses, or WID research.</p>
+          <div class="suggested-questions">
+            <p class="suggestions-label">Try asking:</p>
+            <button class="suggestion" data-q="What are the key principles of Writing Across the Curriculum?">Key principles of WAC</button>
+            <button class="suggestion" data-q="How do writing-intensive courses differ across disciplines?">WI courses across disciplines</button>
+            <button class="suggestion" data-q="What does the research say about peer review in writing classes?">Research on peer review</button>
+            <button class="suggestion" data-q="What are effective strategies for faculty development in WAC programs?">Faculty development strategies</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="input-area">
+      <div class="input-wrapper">
+        <textarea id="user-input" placeholder="Ask about WAC/WID scholarship…" rows="1" aria-label="Your question"></textarea>
+        <button id="send-btn" title="Send message" aria-label="Send message" disabled>
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 10h14M12 5l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+      <p class="disclaimer">Responses are AI-generated from indexed scholarship. Always verify citations against original sources.</p>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
