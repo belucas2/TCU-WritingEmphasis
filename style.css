@@ -159,11 +159,11 @@ header {
 
 /* Confidence level badges and inline code */
 .message-content code {
-  background: rgba(0, 0, 0, 0.04);
-  padding: 2px 5px;
-  border-radius: 3px;
+  background: transparent;
+  padding: 0 2px;
+  border-radius: 0;
   font-size: 0.7em;
-  color: #666;
+  color: #999;
   font-weight: 400;
 }
 
